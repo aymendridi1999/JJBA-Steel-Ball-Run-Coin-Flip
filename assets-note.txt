@@ -1,1 +1,0 @@
-Optimized deployment assets are WebP versions of the original source images to reduce repository and Vercel transfer size while preserving the visual design.
