@@ -1,1 +1,0 @@
-Temporary marker while restoring high-quality production assets from the original functional build.
