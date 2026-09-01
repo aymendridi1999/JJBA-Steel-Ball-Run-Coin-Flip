@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steel Ball Run Coin Viewer</title>
+  <style>
+    :root {
+      --panel: rgba(18, 10, 6, 0.46);
+      --panel-border: rgba(255, 230, 208, 0.18);
+      --text: rgba(255, 245, 235, 0.94);
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        linear-gradient(rgba(12, 8, 6, 0.12), rgba(12, 8, 6, 0.38)),
+        url('./background.webp') center center / cover no-repeat fixed;
+    }
+    #app { position: fixed; inset: 0; }
+    canvas { display:block; }
+    .brand {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 10;
+      width: min(21vw, 220px);
+      user-select: none;
+      pointer-events: none;
+    }
+    .hud, .light-controls, .music-controls, .game-controls, .history-panel {
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    }
+    .hud {
+      position: fixed; left: 16px; bottom: 16px; z-index: 10;
+      padding: 10px 12px; font-size: 13px; line-height: 1.45;
+    }
+    .light-controls {
+      position: fixed; right: 16px; top: 16px; z-index: 10;
+      padding: 12px; font-size: 12px; line-height: 1.6; min-width: 240px;
+    }
+    .light-controls > label, .music-controls > label {
+      display: block; margin-bottom: 8px; font-weight: bold; font-size: 13px;
+    }
+    .radial-control {
+      position: relative; width: 200px; height: 200px; margin: 10px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 230, 208, 0.1), rgba(255, 230, 208, 0.05));
+      border: 2px solid var(--panel-border); border-radius: 50%; cursor: crosshair;
+    }
+    .radial-control::before {
+      content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px;
+      background: #ffd700; border-radius: 50%; transform: translate(-50%, -50%); z-index: 2;
+    }
+    .light-indicator {
+      position: absolute; top: 50%; left: 50%; width: 12px; height: 12px;
+      background: #ff6b6b; border: 2px solid #ffd700; border-radius: 50%;
+      transform: translate(-50%, -50%); z-index: 3; box-shadow: 0 0 8px rgba(255, 107, 107, 0.8);
+    }
+    .z-slider { margin-top: 10px; }
+    .z-slider label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+    .z-slider input[type="range"] { width: 100%; margin-top: 4px; }
+    .slider-value, .volume-value, .history-index, .history-call { color: rgba(255, 245, 235, 0.72); }
+    .side-row, .music-controls-row, .call-buttons, .action-buttons { display: flex; gap: 8px; align-items: center; }
+    .action-buttons { justify-content: center; }
+    .side-toggle, .reset-button, .mute-button, .call-button, .flip-button, .refresh-button, .history-header {
+      cursor: pointer; transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .side-toggle, .mute-button, .call-button {
+      background: linear-gradient(135deg, #8b7355 0%, #6b5344 100%);
+      color: var(--text); border: 2px solid #a0826d; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold;
+    }
+    .side-toggle.active, .call-button.selected, .mute-button.muted {
+      background: linear-gradient(135deg, #d4a574 0%, #b8860b 100%);
+      border-color: #ffd700; box-shadow: 0 0 10px rgba(212, 165, 116, 0.55);
+    }
+    .reset-button {
+      width: 100%; margin-top: 8px; background: linear-gradient(135deg, #8b5a5a 0%, #6b4444 100%);
+      color: var(--text); border: 2px solid #a07070; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold;
+    }
+    .music-controls {
+      position: fixed; right: 16px; bottom: 16px; z-index: 10; padding: 12px; font-size: 12px; min-width: 220px;
+    }
+    .volume-slider { flex: 1; }
+    .volume-slider input[type="range"] { width: 100%; }
+    .game-controls {
+      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+      z-index: 10; padding: 12px 20px; font-size: 13px; text-align: center;
+    }
+    .call-buttons { justify-content: center; margin: 10px 0; }
+    .call-button { font-size: 13px; padding: 8px 16px; }
+    .flip-button, .refresh-button {
+      background: linear-gradient(135deg, #d4a574 0%, #b8860b 100%);
+      color: #1a1a1a; border: 2px solid #8b6914; border-radius: 8px; font-size: 14px; font-weight: bold;
+    }
+    .flip-button { padding: 10px 24px; }
+    .refresh-button { width: 42px; height: 42px; padding: 0; font-size: 20px; }
+    .result-display {
+      margin-top: 10px; font-size: 18px; font-weight: bold; min-height: 28px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .result-display.win { color: #00ff7f; }
+    .result-display.lose { color: #ff7a7a; }
+    .result-display.flipping { color: #ffd700; }
+    .history-panel {
+      position: fixed; top: 150px; left: 16px; z-index: 10; width: min(22vw, 260px); overflow: hidden;
+    }
+    .history-header {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      background: transparent; color: var(--text); border: none; padding: 10px 12px; font-size: 13px; font-weight: bold;
+    }
+    .history-body { padding: 0 12px 12px; font-size: 12px; }
+    .history-panel.collapsed .history-body { display: none; }
+    .history-chevron { transition: transform .2s ease; }
+    .history-panel.collapsed .history-chevron { transform: rotate(-90deg); }
+    .history-empty { color: rgba(255,245,235,0.68); padding-top: 4px; }
+    .history-list { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow: auto; }
+    .history-item {
+      display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center;
+      padding: 7px 0; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .history-badge {
+      display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-weight: bold;
+    }
+    .history-badge.win { background: rgba(0,255,127,.18); color: #00ff7f; }
+    .history-badge.lose { background: rgba(255,122,122,.18); color: #ff7a7a; }
+    .history-badge.neutral { background: rgba(255,215,0,.18); color: #ffd700; }
+    .history-result { font-weight: bold; }
+    .error {
+      position: fixed; right: 16px; top: 16px; z-index: 100; max-width: 420px;
+      background: rgba(70,16,16,.92); color: #fff; border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px; padding: 12px; display: none; white-space: pre-wrap;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <img class="brand" src="./logo.webp" alt="Steel Ball Run logo" />
+  <div class="history-panel" id="historyPanel">
+    <button class="history-header" id="historyToggle" type="button">
+      <span>Flip History</span><span class="history-chevron">▾</span>
+    </button>
+    <div class="history-body">
+      <div class="history-empty" id="historyEmpty">No flips yet.</div>
+      <ol class="history-list" id="historyList"></ol>
+    </div>
+  </div>
+  <div id="app"></div>
+  <div class="hud">Left-drag coin to rotate freely · Scroll to zoom · Right-drag to pan</div>
+
+  <div class="light-controls">
+    <label>Light Position</label>
+    <div class="radial-control" id="radialControl"><div class="light-indicator" id="lightIndicator"></div></div>
+    <div class="z-slider">
+      <label>Distance: <span class="slider-value" id="lightZValue">7.0</span></label>
+      <input type="range" id="lightZ" min="-15" max="15" value="7" step="0.1">
+    </div>
+    <div class="side-row" style="margin-top:10px;">
+      <button class="side-toggle active" id="sideFront" style="flex:1;">Front</button>
+      <button class="side-toggle" id="sideBack" style="flex:1;">Back</button>
+    </div>
+    <button class="reset-button" id="resetCoin">Reset Coin</button>
+  </div>
+
+  <div class="music-controls">
+    <label>Dance With Steel Ball Run</label>
+    <div class="music-controls-row">
+      <button class="mute-button" id="muteButton">🔊 Mute</button>
+      <div class="volume-slider"><input type="range" id="volumeSlider" min="0" max="100" value="50"></div>
+      <div class="volume-value" id="volumeValue">50%</div>
+    </div>
+  </div>
+
+  <div class="game-controls">
+    <div>Heads or Tails?</div>
+    <div class="call-buttons">
+      <button class="call-button" id="callHeads">Heads</button>
+      <button class="call-button" id="callTails">Tails</button>
+    </div>
+    <div class="action-buttons">
+      <button class="flip-button" id="flipButton">Flip Coin</button>
+      <button class="refresh-button" id="refreshCoinButton" title="Refresh Coin" aria-label="Refresh Coin">↻</button>
+    </div>
+    <div class="result-display" id="resultDisplay"></div>
+  </div>
+
+  <div id="error" class="error"></div>
+
+  <audio id="backgroundMusic" loop preload="auto">
+    <source src="./background_music.wav" type="audio/wav">
+  </audio>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
