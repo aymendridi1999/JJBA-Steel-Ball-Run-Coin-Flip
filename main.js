@@ -178,10 +178,10 @@ function tintCoinArtwork(texture, preset, rotation = 0) {
 }
 
 const [frontBase, backBase, bumpMap, bumpMapBack] = await Promise.all([
-  loader.loadAsync("./coin_face_front.webp"),
-  loader.loadAsync("./coin_face_back.webp"),
-  loader.loadAsync("./coin_bump.webp"),
-  loader.loadAsync("./coin_bump_back.webp"),
+  loader.loadAsync("./coin_face_front.png"),
+  loader.loadAsync("./coin_face_back.png"),
+  loader.loadAsync("./coin_bump.png"),
+  loader.loadAsync("./coin_bump_back.png"),
 ]);
 
 const frontMap = tintCoinArtwork(frontBase, materialPreset, 0);
