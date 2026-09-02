@@ -1,18 +1,31 @@
 # JJBA Steel Ball Run Coin Flip
 
-An interactive 3D coin-flip web experience inspired by *JoJo's Bizarre Adventure: Steel Ball Run*.
+An interactive 3D coin-flip experience inspired by *JoJo's Bizarre Adventure: Steel Ball Run*, built with Three.js and deployed as a static web project on Vercel.
 
-The project uses Three.js to render a detailed, physically shaded coin with interactive lighting, free rotation, randomized material rarity, heads-or-tails gameplay, flip history, and background music.
+The project has been restored around its original high-resolution visual assets and audio while keeping the application lightweight and entirely client-side.
+
+## Live Demo
+
+**Vercel:** https://jjba-steel-ball-run-coin-flip-test.vercel.app
+
+## Overview
+
+The application renders a detailed Steel Ball Run-inspired coin in 3D with physically shaded materials, front and back textures, bump mapping, interactive lighting, camera controls, animated coin flips, heads-or-tails gameplay, flip history, and background music.
+
+No backend, database, build framework, or application server is required. The project is plain HTML, CSS, JavaScript ES modules, Three.js, and static assets.
 
 ## Features
 
 - Interactive 3D coin rendered with Three.js
-- High-resolution front, back, and bump textures
+- Original high-resolution PNG front, back, and bump textures
+- Original background and logo assets
 - Free coin rotation, zoom, and camera panning
-- Adjustable light position and front/back lighting
-- Heads-or-tails call and animated coin flip
+- Adjustable key-light position and distance
+- Front/back lighting controls
+- Heads-or-tails call before each flip
+- Animated randomized coin flip
 - Flip history with win/loss tracking
-- Random material rarity system:
+- Random coin material rarity system:
   - Copper — 50%
   - Silver — 35%
   - Gold — 14.9%
@@ -20,6 +33,7 @@ The project uses Three.js to render a detailed, physically shaded coin with inte
 - Material refresh control
 - Background music with mute and volume controls
 - Responsive full-screen presentation
+- Static deployment on Vercel
 
 ## Tech Stack
 
@@ -31,7 +45,9 @@ The project uses Three.js to render a detailed, physically shaded coin with inte
 
 ## Run Locally
 
-Because the project uses JavaScript modules and local assets, serve it through a local HTTP server rather than opening `index.html` directly.
+Because the application uses JavaScript modules and local assets, serve the repository through a local HTTP server instead of opening `index.html` directly.
+
+Using Python:
 
 ```bash
 python -m http.server 8000
@@ -43,18 +59,23 @@ Then open:
 http://localhost:8000
 ```
 
+Any equivalent static HTTP server will work.
+
 ## Controls
 
-- **Left-drag:** rotate the coin
-- **Mouse wheel:** zoom
-- **Right-drag:** pan the camera
-- **Light Position:** drag inside the radial control to reposition the key light
-- **Distance:** move the light closer or farther away
-- **Front / Back:** move the key light between the two sides of the coin
-- **Reset Coin:** restore the initial coin orientation and camera position
-- **Heads / Tails:** make a call before flipping
-- **Flip Coin:** animate a randomized flip
-- **↻:** generate a new random coin material
+| Control | Action |
+| --- | --- |
+| Left-drag | Rotate the coin freely |
+| Mouse wheel | Zoom |
+| Right-drag | Pan the camera |
+| Light Position | Reposition the key light |
+| Distance | Move the light closer or farther away |
+| Front / Back | Move lighting between the two coin faces |
+| Reset Coin | Restore the initial coin and camera position |
+| Heads / Tails | Make a call before flipping |
+| Flip Coin | Run an animated randomized flip |
+| Refresh | Generate a new random coin material |
+| Mute / Volume | Control the background music |
 
 ## Project Structure
 
@@ -74,9 +95,17 @@ http://localhost:8000
 └── vercel.json
 ```
 
+## Deployment
+
+The `main` branch is connected directly to Vercel. Pushes to `main` produce the production deployment automatically.
+
+The current production version uses the restored PNG textures and source audio directly; temporary compatibility assets and obsolete compressed asset copies have been removed from the repository.
+
 ## Attribution
 
-This is a non-commercial fan project inspired by *JoJo's Bizarre Adventure: Steel Ball Run*. See [CREDITS.md](CREDITS.md) for attribution and the project disclaimer.
+This is a non-commercial fan project inspired by *JoJo's Bizarre Adventure: Steel Ball Run*.
+
+See [CREDITS.md](CREDITS.md) for attribution and the full project disclaimer.
 
 ## License
 
