@@ -209,7 +209,7 @@
       const restoredUrl = typeof url === "string" ? url.replace(/\.webp$/i, ".png") : url;
       return originalLoadAsync.call(this, restoredUrl, ...args);
     };
+    await import("./main.js");
   </script>
-  <script type="module" src="./main.js"></script>
 </body>
 </html>
