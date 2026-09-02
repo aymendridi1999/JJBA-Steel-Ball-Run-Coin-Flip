@@ -12,6 +12,8 @@ The project has been restored around its original high-resolution visual assets 
 
 The application renders a detailed Steel Ball Run-inspired coin in 3D with physically shaded materials, front and back textures, bump mapping, interactive lighting, camera controls, animated coin flips, heads-or-tails gameplay, flip history, and background music.
 
+The interface is designed for both desktop and mobile use. Narrow portrait screens receive responsive camera framing, compact touch-friendly controls, safe-area handling for notched devices, and reduced WebGL render density for better mobile performance.
+
 No backend, database, build framework, or application server is required. The project is plain HTML, CSS, JavaScript ES modules, Three.js, and static assets.
 
 ## Features
@@ -19,7 +21,14 @@ No backend, database, build framework, or application server is required. The pr
 - Interactive 3D coin rendered with Three.js
 - Original high-resolution PNG front, back, and bump textures
 - Original background and logo assets
-- Free coin rotation, zoom, and camera panning
+- Free coin rotation, zoom, and camera panning on desktop
+- Single-finger coin rotation on touch devices
+- Responsive portrait and landscape layouts
+- Mobile-aware camera framing so the coin remains visible on narrow screens
+- Touch-sized Heads, Tails, Flip, refresh, lighting, and audio controls
+- Collapsible lighting and audio panels on mobile
+- Safe-area support for notched phones and devices with home indicators
+- Reduced mobile pixel ratio for smoother WebGL rendering on high-DPI displays
 - Adjustable key-light position and distance
 - Front/back lighting controls
 - Heads-or-tails call before each flip
@@ -32,7 +41,6 @@ No backend, database, build framework, or application server is required. The pr
   - Diamond — 0.1%
 - Material refresh control
 - Background music with mute and volume controls
-- Responsive full-screen presentation
 - Static deployment on Vercel
 
 ## Tech Stack
@@ -63,6 +71,8 @@ Any equivalent static HTTP server will work.
 
 ## Controls
 
+### Desktop
+
 | Control | Action |
 | --- | --- |
 | Left-drag | Rotate the coin freely |
@@ -77,12 +87,27 @@ Any equivalent static HTTP server will work.
 | Refresh | Generate a new random coin material |
 | Mute / Volume | Control the background music |
 
+### Mobile
+
+| Control | Action |
+| --- | --- |
+| One-finger drag | Rotate the coin |
+| Light | Open or close the lighting controls |
+| Audio | Open or close the music controls |
+| Flip History | Expand or collapse recent results |
+| Heads / Tails | Make a call before flipping |
+| Flip Coin | Run an animated randomized flip |
+| Refresh | Generate a new random coin material |
+
+The mobile layout automatically adapts to portrait and landscape orientation. Control panels remain collapsed until needed so the 3D coin keeps most of the available screen space.
+
 ## Project Structure
 
 ```text
 .
 ├── index.html
 ├── main.js
+├── responsive.js
 ├── background.png
 ├── logo.png
 ├── coin_face_front.png
@@ -94,6 +119,8 @@ Any equivalent static HTTP server will work.
 ├── LICENSE
 └── vercel.json
 ```
+
+`responsive.js` contains the mobile camera-framing, render-density, panel, and touch helpers while `main.js` remains responsible for the Three.js scene and coin-flip behavior.
 
 ## Deployment
 
