@@ -202,14 +202,6 @@
     <source src="./background_music.wav" type="audio/wav">
   </audio>
 
-  <script type="module">
-    import * as THREE from "three";
-    const originalLoadAsync = THREE.TextureLoader.prototype.loadAsync;
-    THREE.TextureLoader.prototype.loadAsync = function(url, ...args) {
-      const restoredUrl = typeof url === "string" ? url.replace(/\.webp$/i, ".png") : url;
-      return originalLoadAsync.call(this, restoredUrl, ...args);
-    };
-    await import("./main.js");
-  </script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
