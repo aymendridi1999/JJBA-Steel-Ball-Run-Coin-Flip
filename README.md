@@ -1,38 +1,37 @@
 # JJBA Steel Ball Run Coin Flip
 
-An interactive **Steel Ball Run-inspired 3D coin flip experience** built with vanilla JavaScript and Three.js.
+An interactive 3D coin-flip web experience inspired by *JoJo's Bizarre Adventure: Steel Ball Run*.
 
-The project renders a fully rotatable 3D coin with textured faces, dynamic lighting, weighted material variants, heads-or-tails gameplay, flip history, and background audio.
+The project uses Three.js to render a detailed, physically shaded coin with interactive lighting, free rotation, randomized material rarity, heads-or-tails gameplay, flip history, and background music.
 
 ## Features
 
 - Interactive 3D coin rendered with Three.js
-- Free 360° mouse rotation, zoom, and pan
+- High-resolution front, back, and bump textures
+- Free coin rotation, zoom, and camera panning
+- Adjustable light position and front/back lighting
 - Heads-or-tails call and animated coin flip
 - Flip history with win/loss tracking
-- Adjustable light position, depth, and front/back lighting
-- Random material variants:
+- Random material rarity system:
   - Copper — 50%
   - Silver — 35%
   - Gold — 14.9%
   - Diamond — 0.1%
-- Refresh control to reroll the coin material
+- Material refresh control
 - Background music with mute and volume controls
 - Responsive full-screen presentation
 
-## Tech
+## Tech Stack
 
 - HTML5
 - CSS3
 - JavaScript ES modules
-- [Three.js](https://threejs.org/)
-- WebGL
+- Three.js 0.180.0
+- Vercel
 
-Three.js is loaded from jsDelivr through an import map, so there is no package-install or build step.
+## Run Locally
 
-## Run locally
-
-From the project directory:
+Because the project uses JavaScript modules and local assets, serve it through a local HTTP server rather than opening `index.html` directly.
 
 ```bash
 python -m http.server 8000
@@ -44,25 +43,41 @@ Then open:
 http://localhost:8000
 ```
 
-Opening `index.html` directly is not recommended because browser module and asset-loading rules work best through a local HTTP server.
-
 ## Controls
 
-- **Left drag:** rotate the coin freely
+- **Left-drag:** rotate the coin
 - **Mouse wheel:** zoom
-- **Right drag:** pan
+- **Right-drag:** pan the camera
+- **Light Position:** drag inside the radial control to reposition the key light
+- **Distance:** move the light closer or farther away
+- **Front / Back:** move the key light between the two sides of the coin
+- **Reset Coin:** restore the initial coin orientation and camera position
 - **Heads / Tails:** make a call before flipping
-- **Flip Coin:** animate and resolve a fair 50/50 flip
-- **Refresh icon:** reroll the coin material
-- **Light Position:** move the key light around the coin
-- **Distance:** move the light along the Z axis
-- **Front / Back:** switch which side receives the key light
-- **Reset Coin:** restore the default coin and camera orientation
+- **Flip Coin:** animate a randomized flip
+- **↻:** generate a new random coin material
 
-## Asset optimization
+## Project Structure
 
-The web version uses optimized WebP textures to keep the deployment lightweight while preserving the original artwork and bump-map detail.
+```text
+.
+├── index.html
+├── main.js
+├── background.png
+├── logo.png
+├── coin_face_front.png
+├── coin_face_back.png
+├── coin_bump.png
+├── coin_bump_back.png
+├── background_music.wav
+├── CREDITS.md
+├── LICENSE
+└── vercel.json
+```
 
-## Disclaimer
+## Attribution
 
-This is a non-commercial fan project inspired by *JoJo's Bizarre Adventure: Steel Ball Run*. JoJo's Bizarre Adventure and related names, characters, logos, and imagery belong to their respective rights holders. This repository is not affiliated with or endorsed by the official rights holders.
+This is a non-commercial fan project inspired by *JoJo's Bizarre Adventure: Steel Ball Run*. See [CREDITS.md](CREDITS.md) for attribution and the project disclaimer.
+
+## License
+
+The original source code in this repository is licensed under the MIT License. Third-party characters, artwork, branding, music, and other referenced intellectual property remain the property of their respective owners.
